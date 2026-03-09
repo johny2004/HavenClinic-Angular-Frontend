@@ -3,49 +3,52 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cliente } from '../entity/clientes';
 import { User } from '../entity/user';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClienteService {
 
+  private apiUrl = environment.apiUrl;
+
   constructor(
     private http: HttpClient
   ) { }
 
   findAll(): Observable<Cliente[]>{
-    return this.http.get<Cliente[]>('http://localhost:8090/cliente/all');
+    return this.http.get<Cliente[]>(`${this.apiUrl}/cliente/all`);
 
   }
   findByCedula(cedula:number): Observable<Cliente>{
-    return this.http.get<Cliente>('http://localhost:8090/cliente/find/'+ cedula);
+    return this.http.get<Cliente>(`${this.apiUrl}/cliente/find/${cedula}`);
   }
 
   findByEmail(correo:String): Observable<Cliente>{
-    return this.http.get<Cliente>('http://localhost:8090/cliente/findEmail/' + correo.toString());
+    return this.http.get<Cliente>(`${this.apiUrl}/cliente/findEmail/${correo.toString()}`);
     }
 
     //para buscar todos los clientes con dicho nombre
     findByNombre(nombre: string): Observable<Cliente[]> {
-      return this.http.get<Cliente[]>('http://localhost:8090/cliente/findClienteByNombre/'+nombre);
+      return this.http.get<Cliente[]>(`${this.apiUrl}/cliente/findClienteByNombre/${nombre}`);
     }
 
   deleteByCedula(cedula:number){
     console.log(cedula);
-    this.http.delete( 'http://localhost:8090/cliente/eliminarCliente/'+ cedula).subscribe();
+    this.http.delete(`${this.apiUrl}/cliente/eliminarCliente/${cedula}`).subscribe();
   }
 
   //para agregar un nuevo cliente
   addCliente(cliente:Cliente): Observable<Cliente>{
     console.log("Agregando cliente: ",cliente);
-   return this.http.post<Cliente>('http://localhost:8090/cliente/agregarCliente', cliente)
+   return this.http.post<Cliente>(`${this.apiUrl}/cliente/agregarCliente`, cliente)
  
   }
 
 
 
     actualizarCliente(id: number, clienteAct: Cliente):Observable<Cliente>{
-      return this.http.put<Cliente>('http://localhost:8090/cliente/update/' + id, clienteAct);
+      return this.http.put<Cliente>(`${this.apiUrl}/cliente/update/${id}`, clienteAct);
     }
 
     login(user: User, userType: string): Observable<string> {
@@ -59,7 +62,7 @@ export class ClienteService {
        
       };
   console.log(body);
-      return this.http.post('http://localhost:8090/login', body, { responseType: 'text' });
+      return this.http.post(`${this.apiUrl}/login`, body, { responseType: 'text' });
     }
 
     logout(): void {
@@ -68,7 +71,7 @@ export class ClienteService {
   
 
     ClienteHome(): Observable<Cliente>{
-      return this.http.get<Cliente>('http://localhost:8090/cliente/details');
+      return this.http.get<Cliente>(`${this.apiUrl}/cliente/details`);
     }
 
   }

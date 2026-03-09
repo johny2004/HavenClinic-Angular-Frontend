@@ -4,12 +4,14 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {Droga} from "../entity/drogas";
 import {Mascota} from "../entity/mascotas";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TratamientoService {
 
+  private apiUrl = environment.apiUrl;
   listaTratamientos: Tratamiento[] = [];
 
   constructor(
@@ -17,30 +19,30 @@ export class TratamientoService {
   ) { }
 
   findAll(): Observable<Tratamiento[]>{
-    return this.http.get<Tratamiento[]>('http://localhost:8090/tratamientos/all');
+    return this.http.get<Tratamiento[]>(`${this.apiUrl}/tratamientos/all`);
   }
 
   findById(id:number):Observable<Tratamiento>{
-    return this.http.get<Tratamiento>('http://localhost:8090/tratamientos/info/'+id);
+    return this.http.get<Tratamiento>(`${this.apiUrl}/tratamientos/info/${id}`);
   }
 
   findByPetId(id: number):Observable<Tratamiento>{
-    return this.http.get<Tratamiento>('http://localhost:8090/tratamientos/historial/'+id);
+    return this.http.get<Tratamiento>(`${this.apiUrl}/tratamientos/historial/${id}`);
   }
 
   addTratamiento(mascotaId: number, vetId: number, drogaId: number, tratamiento: Tratamiento): Observable<any> {
-    return this.http.post(`http://localhost:8090/tratamientos/add/${vetId}/${mascotaId}/${drogaId}`, tratamiento);
+    return this.http.post(`${this.apiUrl}/tratamientos/add/${vetId}/${mascotaId}/${drogaId}`, tratamiento);
   }
 
   actualizarTratamiento(mascotaId: number, drogaId: number, tratamiento: Tratamiento): Observable<any> {
-    return this.http.put(`http://localhost:8090/tratamientos/update/${mascotaId}/${drogaId}`, tratamiento);
+    return this.http.put(`${this.apiUrl}/tratamientos/update/${mascotaId}/${drogaId}`, tratamiento);
   }
 
   getHistorial(id: number): Observable<Tratamiento[]>{
-    return this.http.get<Tratamiento[]>('http://localhost:8090/tratamientos/historial/' +id)
+    return this.http.get<Tratamiento[]>(`${this.apiUrl}/tratamientos/historial/${id}`);
   }
 
   getDroga(id: number): Observable<Droga>{
-    return this.http.get<Droga>('http://localhost:8090/tratamientos/droga/' +id)
+    return this.http.get<Droga>(`${this.apiUrl}/tratamientos/droga/${id}`);
   }
 }
