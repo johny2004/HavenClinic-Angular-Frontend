@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cliente } from '../entity/clientes';
@@ -61,8 +61,17 @@ export class ClienteService {
         userType: userType
        
       };
-  console.log(body);
-      return this.http.post(`${this.apiUrl}/login`, body, { responseType: 'text' });
+      
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      });
+      
+      console.log(body);
+      return this.http.post(`${this.apiUrl}/login`, body, { 
+        headers: headers,
+        responseType: 'text' 
+      });
     }
 
     logout(): void {
